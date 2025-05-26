@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: Notification Microservice API
+  version: 1.0.0
+  description: API for sending and listing Email and SMS notifications.
+
+servers:
+  - url: http://localhost:3000/api
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >
+        Enter your API key as: `Bearer {your_api_key}`. Example: 
+        `Bearer 9a6d0e3f1b86d83e4b3f6d0b9a5e7fba1f7d6f5b43e3a5c6e2f1d4e8c9b3a2b1`
+
+security:
+  - ApiKeyAuth: []
+
+tags:
+  - name: Notifications
+    description: Email and SMS Notifications
+
+paths:
+  /notifications/email:
+    post:
+      tags:
+        - Notifications
+      summary: Send Email Notification
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [site, to, message]
+              properties:
+                site:
+                  type: string
+                  example: http://localhost:3000/
+                to:
+                  oneOf:
+                    - type: string
+                    - type: array
+                      items:
+                        type: string
+                  example: ["user@example.com"]
+                subject:
+                  type: string
+                  example: Welcome to NotifyMe
+                message:
+                  type: string
+                  example: Thank you for signing up!
+                log:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: Email notification(s) processed
+        '400':
+          description: Missing required fields
+        '500':
+          description: Server error
+
+  /notifications/sms:
+    post:
+      tags:
+        - Notifications
+      summary: Send SMS Notification
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [site, to, message]
+              properties:
+                site:
+                  type: string
+                  example: http://localhost:3000/
+                to:
+                  oneOf:
+                    - type: string
+                    - type: array
+                      items:
+                        type: string
+                  example: ["1234567890"]
+                message:
+                  type: string
+                  example: Your OTP is 123456.
+                log:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: SMS notification(s) processed
+        '400':
+          description: Missing required fields
+        '500':
+          description: Server error
+
+  /notifications/email/list:
+    get:
+      tags:
+        - Notifications
+      summary: List Email Notifications
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: site
+          in: query
+          schema:
+            type: string
+          example: http://localhost:3000/
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: 10
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+          example: createdAt
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+          example: desc
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [sent, failed]
+      responses:
+        '200':
+          description: List of email notifications
+        '500':
+          description: Server error
+
+  /notifications/sms/list:
+    get:
+      tags:
+        - Notifications
+      summary: List SMS Notifications
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: site
+          in: query
+          schema:
+            type: string
+          example: http://localhost:3000/
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: 10
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+          example: createdAt
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+          example: desc
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [sent, failed]
+      responses:
+        '200':
+          description: List of SMS notifications
+        '500':
+          description: Server error
