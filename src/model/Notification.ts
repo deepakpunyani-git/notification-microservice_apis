@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface INotification extends Document {
   site: string;
-  appname: string;
+  appName: string;
   type: 'email' | 'sms';
   to: string;
   subject?: string; 

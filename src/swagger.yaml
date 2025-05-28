@@ -5,7 +5,7 @@ info:
   description: API for sending and listing Email and SMS notifications.
 
 servers:
-  - url: http://localhost:3000/api
+  - url: https://notification-microservice-apis.onrender.com/api
 
 components:
   securitySchemes:
@@ -38,12 +38,12 @@ paths:
           application/json:
             schema:
               type: object
-              required: [site, appname, to, message]
+              required: [site, appName, to, message]
               properties:
                 site:
                   type: string
                   example: http://localhost:3000/
-                appname:
+                appName:
                   type: string
                   example: NotifyMe
                 to:
@@ -83,12 +83,12 @@ paths:
           application/json:
             schema:
               type: object
-              required: [site, appname, to, message]
+              required: [site, appName, to, message]
               properties:
                 site:
                   type: string
                   example: http://localhost:3000/
-                appname:
+                appName:
                   type: string
                   example: NotifyMe
                 to:

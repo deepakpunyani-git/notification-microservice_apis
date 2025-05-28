@@ -11,7 +11,7 @@ export const validateNotificationList = [
 
 export const validateEmailNotification = [
   body('site').notEmpty().withMessage('Site is required'),
-  body('appname').notEmpty().withMessage('App name is required'),
+  body('appName').notEmpty().withMessage('App name is required'),
   body('to')
     .notEmpty().withMessage('Recipient email(s) required')
     .custom((value) => {
@@ -28,7 +28,7 @@ export const validateEmailNotification = [
 
 export const validateSMSNotification = [
   body('site').notEmpty().withMessage('Site is required'),
-  body('appname').notEmpty().withMessage('App name is required'),
+  body('appName').notEmpty().withMessage('App name is required'),
   body('to')
     .notEmpty().withMessage('Recipient phone number(s) required')
     .custom((value) => {

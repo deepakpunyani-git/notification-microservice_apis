@@ -51,9 +51,9 @@ export const listEmailNotifications = async (req: Request, res: Response): Promi
 };
 
 export const sendEmailNotification = async (req: Request, res: Response): Promise<void> => {
-  const { site, to, subject, message, appname, log = true } = req.body;
+  const { site, to, subject, message, appName, log = true } = req.body;
 
-  if (!site || !to || !message || !appname) {
+  if (!site || !to || !message || !appName) {
     res.status(400).json({ success: false, message: 'Missing required fields' });
     return;
   }
@@ -71,7 +71,7 @@ export const sendEmailNotification = async (req: Request, res: Response): Promis
     let errorMessage = '';
 
     try {
-      await sendEmail(recipient, subject || '', message, appname); 
+      await sendEmail(recipient, subject || '', message, appName); 
     } catch (err) {
       status = 'failed';
       errorMessage = (err as Error).message;
@@ -81,7 +81,7 @@ export const sendEmailNotification = async (req: Request, res: Response): Promis
       try {
         await Notification.create({
           site,
-          appname,
+          appName,
           type: 'email',
           to: recipient,
           subject,
@@ -125,7 +125,7 @@ export const sendSMSNotification = async (req: Request, res: Response): Promise<
     let errorMessage = '';
 
     try {
-      await sendSMS(recipient, message, appname); 
+      await sendSMS(recipient, message, appName); 
     } catch (err) {
       status = 'failed';
       errorMessage = (err as Error).message;
@@ -135,7 +135,7 @@ export const sendSMSNotification = async (req: Request, res: Response): Promise<
       try {
         await Notification.create({
           site,
-          appname,
+          appName,
           type: 'sms',
           to: recipient,
           message,
