@@ -14,8 +14,8 @@ components:
       in: header
       name: Authorization
       description: >
-        Enter your API key as: `Bearer {your_api_key}`. Example: 
-        `Bearer 9a6d0e3f1b86d83e4b3f6d0b9a5e7fba1f7d6f5b43e3a5c6e2f1d4e8c9b3a2b1`
+        Enter your API key as: `{your_api_key}`. Example: 
+        `9a6d0e3f1b86d83e4b3f6d0b9a5e7fba1f7d6f5b43e3a5c6e2f1d4e8c9b3a2b1`
 
 security:
   - ApiKeyAuth: []
@@ -38,11 +38,14 @@ paths:
           application/json:
             schema:
               type: object
-              required: [site, to, message]
+              required: [site, appname, to, message]
               properties:
                 site:
                   type: string
                   example: http://localhost:3000/
+                appname:
+                  type: string
+                  example: NotifyMe
                 to:
                   oneOf:
                     - type: string
@@ -80,11 +83,14 @@ paths:
           application/json:
             schema:
               type: object
-              required: [site, to, message]
+              required: [site, appname, to, message]
               properties:
                 site:
                   type: string
                   example: http://localhost:3000/
+                appname:
+                  type: string
+                  example: NotifyMe
                 to:
                   oneOf:
                     - type: string

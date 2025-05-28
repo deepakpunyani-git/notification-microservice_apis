@@ -4,30 +4,50 @@ import nodemailer from 'nodemailer';
 
 dotenv.config();
 
-const { EMAIL, EMAIL_PASSWORD, FAST2SMS_API_KEY } = process.env;
+const { EMAIL_USER, EMAIL_PASSWORD, FAST2SMS_API_KEY } = process.env;
 
-export const sendEmail = async (to: string, subject: string, text: string) => {
+export const sendEmail = async (
+  to: string,
+  subject: string,
+  text: string,
+  appName: string 
+) => {
   const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    service: 'gmail',
     auth: {
-      user: EMAIL,
+      user: EMAIL_USER,
       pass: EMAIL_PASSWORD,
     },
   });
 
-  await transporter.sendMail({
-    from: EMAIL,
+  const mailOptions = {
+    from: `"${appName}" <${EMAIL_USER}>`, 
     to,
     subject,
     text,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
   });
 };
 
-export const sendSMS = async (phone: string, message: string) => {
+
+export const sendSMS = async (
+  phone: string,
+  message: string,
+  appName: string 
+) => {
+  const brandedMessage = `${appName}: ${message}`; 
+
   await axios.post(
     'https://www.fast2sms.com/dev/bulkV2',
     {
-      variables_values: message,
+      variables_values: brandedMessage,
       route: 'q',
       numbers: phone,
     },

@@ -51,9 +51,9 @@ export const listEmailNotifications = async (req: Request, res: Response): Promi
 };
 
 export const sendEmailNotification = async (req: Request, res: Response): Promise<void> => {
-  const { site, to, subject, message, log = true } = req.body;
+  const { site, to, subject, message, appname, log = true } = req.body;
 
-  if (!site || !to || !message) {
+  if (!site || !to || !message || !appname) {
     res.status(400).json({ success: false, message: 'Missing required fields' });
     return;
   }
@@ -71,7 +71,7 @@ export const sendEmailNotification = async (req: Request, res: Response): Promis
     let errorMessage = '';
 
     try {
-      await sendEmail(recipient, subject || '', message);
+      await sendEmail(recipient, subject || '', message, appname); 
     } catch (err) {
       status = 'failed';
       errorMessage = (err as Error).message;
@@ -81,6 +81,7 @@ export const sendEmailNotification = async (req: Request, res: Response): Promis
       try {
         await Notification.create({
           site,
+          appname,
           type: 'email',
           to: recipient,
           subject,
@@ -104,9 +105,9 @@ export const sendEmailNotification = async (req: Request, res: Response): Promis
 };
 
 export const sendSMSNotification = async (req: Request, res: Response): Promise<void> => {
-  const { site, to, message, log = true } = req.body;
+  const { site, to, message, appName, log = true } = req.body;
 
-  if (!site || !to || !message) {
+  if (!site || !to || !message || !appName) {
     res.status(400).json({ success: false, message: 'Missing required fields' });
     return;
   }
@@ -124,7 +125,7 @@ export const sendSMSNotification = async (req: Request, res: Response): Promise<
     let errorMessage = '';
 
     try {
-      await sendSMS(recipient, message);
+      await sendSMS(recipient, message, appname); 
     } catch (err) {
       status = 'failed';
       errorMessage = (err as Error).message;
@@ -134,6 +135,7 @@ export const sendSMSNotification = async (req: Request, res: Response): Promise<
       try {
         await Notification.create({
           site,
+          appname,
           type: 'sms',
           to: recipient,
           message,
